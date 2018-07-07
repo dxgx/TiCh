@@ -36,42 +36,44 @@ function tich() {
             regexProperty = /\$tiappProperty\.([^\{\}]*)\$/gm;
 
         if (!name) {
-            
+
             if (fs.existsSync('./app/config.json')) {
-                
+
                 var alloyCfg = JSON.parse(fs.readFileSync('./app/config.json', 'utf-8'));
-                
+
                 if (alloyCfg.global.theme) {
                     console.log('\nFound a theme in config.json, trying ' + chalk.cyan(alloyCfg.global.theme));
                     select(alloyCfg.global.theme);
-                } 
+                }
                 else {
                     status();
                 }
             }
-        } 
+        }
         else {
             // find the config name specified
             cfg.configs.forEach(function(config) {
 
                 if (config.name === name) {
-                    
+
                     console.log('\nFound a config for ' + chalk.cyan(config.name) + '\n');
-                    
+
                     if (fs.existsSync('./app/config.json')) {
-                        
+
                         var alloyCfg = JSON.parse(fs.readFileSync('./app/config.json', 'utf-8'));
-                        
+
                         if (alloyCfg.global.theme) {
-                          
+
                           var original = alloyCfg.global.theme;
-                          
-                          alloyCfg.global.theme = name;
-                          
-                          fs.writeFile('./app/config.json', JSON.stringify(alloyCfg, null, 2), function (err) {
-                              if (err) return console.log(err);
-                              console.log('\nChanging theme value in config.json from ' + chalk.cyan(original) + ' to ' + chalk.cyan(name));
-                          });
+
+						  if (processAlloy) {
+
+							  alloyCfg.global.theme = name;
+	                          fs.writeFile('./app/config.json', JSON.stringify(alloyCfg, null, 2), function (err) {
+	                              if (err) return console.log(err);
+	                              console.log('\nChanging theme value in config.json from ' + chalk.cyan(original) + ' to ' + chalk.cyan(name));
+	                          });
+						  }
                         }
                     }
 
@@ -85,17 +87,17 @@ function tich() {
                         if (setting !== 'properties' && setting !== 'raw') {
 
                             var replaceWith = config.settings[setting];
-                            
+
                             if (typeof replaceWith === 'string') {
-                                    
+
                                 var now = new Date(),
                                     matchResult;
-                                
+
                                 replaceWith.replace('$DATE$', now.toLocaleDateString())
                                             .replace('$TIME$', now.toLocaleTimeString())
                                             .replace('$DATETIME$', now.toLocaleString())
                                             .replace('$TIME_EPOCH$', now.getTime().toString());
-                                            
+
                                 while (matchResult = regex.exec(replaceWith)) {
                                     replaceWith = replaceWith.replace(matchResult[0], tiapp[matchResult[1]]);
                                 }
@@ -104,13 +106,13 @@ function tich() {
                                     replaceWith = replaceWith.replace(matchResult[0], tiapp.getProperty(matchResult[1]));
                                 }
                             }
-                                
+
                             tiapp[setting] = replaceWith;
 
                             console.log(
-                                'Changing ' 
-                                + chalk.cyan(setting) 
-                                + ' to ' 
+                                'Changing '
+                                + chalk.cyan(setting)
+                                + ' to '
                                 + chalk.yellow(replaceWith)
                             );
                         }
@@ -119,7 +121,7 @@ function tich() {
 
                     // settings.properties
                     if (config.settings.properties) {
-                        
+
                         for (var property in config.settings.properties) {
 
                             if (!config.settings.properties.hasOwnProperty(property)) {
@@ -129,15 +131,15 @@ function tich() {
                             var replaceWith = config.settings.properties[property];
 
                             if (typeof replaceWith === 'string') {
-                                    
+
                                 var now = new Date(),
                                     matchResult;
-                                    
+
                                 replaceWith.replace('$DATE$', now.toLocaleDateString())
                                             .replace('$TIME$', now.toLocaleTimeString())
                                             .replace('$DATETIME$', now.toLocaleString())
                                             .replace('$TIME_EPOCH$', now.getTime().toString());
-                                
+
                                 while (matchResult = regex.exec(replaceWith)) {
                                     replaceWith = replaceWith.replace(matchResult[0], tiapp[matchResult[1]]);
                                 }
@@ -146,21 +148,21 @@ function tich() {
                                     replaceWith = replaceWith.replace(matchResult[0], tiapp.getProperty(matchResult[1]));
                                 }
                             }
-                            
+
                             var propertyType = 'string';
-                            
+
                             _.isInteger(replaceWith) && (propertyType = 'int');
-                            
+
                             _.isNumber(replaceWith) && !_.isInteger(replaceWith) && (propertyType = 'double');
 
                             _.isBoolean(replaceWith) && (propertyType = 'bool');
 
                             tiapp.setProperty(property, replaceWith, propertyType);
-                            
+
                             console.log(
-                                'Changing App property ' 
-                                + chalk.cyan(property) 
-                                + ' to ' 
+                                'Changing App property '
+                                + chalk.cyan(property)
+                                + ' to '
                                 + chalk.yellow(replaceWith)
                             );
                         }
@@ -168,13 +170,13 @@ function tich() {
 
                     // settings.raw
                     if (config.settings.raw) {
-                        
+
                         var doc = tiapp.doc;
                         var select = xpath.useNamespaces({
                             'ti': 'http://ti.appcelerator.org',
                             'android': 'http://schemas.android.com/apk/res/android'
                         });
-                        
+
                         for (var path in config.settings.raw) {
 
                             if (!config.settings.raw.hasOwnProperty(path)) {
@@ -182,7 +184,7 @@ function tich() {
                             }
 
                             var node = select(path, doc, true);
-                            
+
                             if (!node) {
                                 console.log(chalk.yellow('Could not find ' + path + ', skipping'));
                                 continue;
@@ -194,20 +196,20 @@ function tich() {
                             }
 
                             var replaceWith = config.settings.raw[path];
-                            
+
                             if (typeof replaceWith === 'string') {
-                                
+
                                 var now = new Date();
-                                
+
                                 replaceWith.replace('$DATE$', now.toLocaleDateString())
                                             .replace('$TIME$', now.toLocaleTimeString())
                                             .replace('$DATETIME$', now.toLocaleString())
                                             .replace('$TIME_EPOCH$', now.getTime().toString());
                             }
-                            
+
                             var matchResult,
                                 changed = false;
-                            
+
                             while (matchResult = regex.exec(replaceWith)) {
                                 replaceWith = replaceWith.replace(matchResult[0], tiapp[matchResult[1]]);
                             }
@@ -228,28 +230,28 @@ function tich() {
                                 node.firstChild.data = replaceWith;
                                 changed = true;
                             }
-                            
+
                             changed && console.log(
-                                'Changing Raw property ' 
-                                + chalk.cyan(path) 
-                                + ' to ' 
+                                'Changing Raw property '
+                                + chalk.cyan(path)
+                                + ' to '
                                 + chalk.yellow(replaceWith)
                             );
                         }
                     }
 
                     if (fs.existsSync('./app/themes/' + name + '/assets/iphone/DefaultIcon.png')) {
-                        
+
                         // if it exists in the themes folder, in a platform subfolder
                         console.log(chalk.blue('Found a DefaultIcon.png in the theme\'s assets/iphone folder\n'));
-                        
+
                         copyFile('./app/themes/' + name + '/assets/iphone/DefaultIcon.png', './DefaultIcon.png');
-                    } 
+                    }
                     else if (fs.existsSync('./app/themes/' + name + '/DefaultIcon.png')) {
-                        
+
                         // if it exists in the top level theme folder
                         console.log(chalk.blue('Found a DefaultIcon.png in the theme folder\n'));
-                        
+
                         copyFile('./app/themes/' + name + '/' + '/DefaultIcon.png', './DefaultIcon.png');
                     }
 
@@ -273,6 +275,7 @@ function tich() {
         .option('-i, --in <path>', 'Specifies the file to read (default: tiapp.xml)')
         .option('-o, --out <path>', 'Specifies the file to write (default: tiapp.xml)')
         .option('-s, --select <name>', 'Updates TiApp.xml to config specified by <name>')
+		.option('--noalloy', 'Do no update theme on Alloy config')
         //.option('-c, --capture <name>', 'Stores the current values of TiApp.xml id, name, version as <name> ')
 
     program.parse(process.argv);
@@ -280,6 +283,7 @@ function tich() {
     var cfgfile = program.cfgfile ? program.cfgfile : 'tich.cfg';
     var infile = program.in ? program.in : './tiapp.xml';
     var outfile = program.out ? program.out : './tiapp.xml';
+	var processAlloy = program.noalloy ? false : true;
 
     // check that all required input paths are good
     [cfgfile, infile].forEach(function (file) {
@@ -294,7 +298,7 @@ function tich() {
 
     // read in the app config
     var tiapp = tiappxml.load(infile);
-    
+
     // Fetch selected config
     var selectedConfig = program.select ? program.select : program.args[1];
 
@@ -308,18 +312,18 @@ function tich() {
     if (program.list) {
         cfg.configs.forEach(function(config) {
             console.log(chalk.cyan(
-                config.name 
-                + ' - ' 
-                + chalk.grey('Name: ') + config.settings.name + ' ' 
-                + chalk.grey('Id: ') + config.settings.id + ' ' 
+                config.name
+                + ' - '
+                + chalk.grey('Name: ') + config.settings.name + ' '
+                + chalk.grey('Id: ') + config.settings.id + ' '
                 + chalk.grey('Version: ') + config.settings.version
             ));
         });
-    } 
+    }
     // select command, select based on the arg passed
     else if (selectedConfig) {
         select(selectedConfig, outfile);
-    } 
+    }
     // capture command - this will store the current TiApp.xml settings
     else if (program.capture) {
         // coming soon!
