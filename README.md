@@ -144,7 +144,7 @@ If you do not specify these options, the following defaults will apply:
 * `--cfgfile` defaults to `./tich.cfg`
 * `--in` and `--out` default to `./tiapp.xml`
 
-## Disable any global theme rewrite in config.json
+##Disable any global theme rewrite in config.json
 
 You can use `--noalloy` to disable changing config.json file. Useful when you want to use PROD and DEV versions of same app, but use slightly different configs for them
 
