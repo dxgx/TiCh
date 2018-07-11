@@ -30,7 +30,6 @@ Create a tich.cfg file in the Titanium project folder as follows:
 {
     "configs": [{
         "name": "app1",
-        "theme": "app",	//this is used instead of name in config when swiching global theme
         "settings": {
             "name": "APP1",
             "version": "1.0.0",
@@ -56,13 +55,13 @@ Create a tich.cfg file in the Titanium project folder as follows:
         }
     },
     {
-		"name": "app_develop",
-		"theme": "app",	//this is used instead of name in config when swiching global theme
-		"settings": {
-			"name": "APP Develop",
-			"version": "1.0.0",
-			"id": "com.domain.app-dev"
-		 }
+	"name": "app_develop",
+	"theme": "app",	
+	"settings": {
+		"name": "APP Develop",
+		"version": "1.0.0",
+		"id": "com.domain.app-dev"
+	 }
     },
     {
         "name": "test",
@@ -81,6 +80,8 @@ Create a tich.cfg file in the Titanium project folder as follows:
 }
 ```
 You can currently put any top level XML node in the settings object, so *publisher*, *copyright*, *icon* etc
+
+`theme`  - optional, param is used instead of `name` in config when switching global theme. Useful when used multiple configs for same alloy theme.
 
 ##Dynamic Substitution
 
@@ -143,7 +144,7 @@ If you do not specify these options, the following defaults will apply:
 * `--cfgfile` defaults to `./tich.cfg`
 * `--in` and `--out` default to `./tiapp.xml`
 
-## Disable any global theme rewrite in config.json
+##Disable any global theme rewrite in config.json
 
 You can use `--noalloy` to disable changing config.json file. Useful when you want to use PROD and DEV versions of same app, but use slightly different configs for them
 
