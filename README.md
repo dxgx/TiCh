@@ -81,7 +81,7 @@ Create a tich.cfg file in the Titanium project folder as follows:
 ```
 You can currently put any top level XML node in the settings object, so *publisher*, *copyright*, *icon* etc
 
-`theme`  - optional, param is used instead of `name` in config when switching global theme. Useful when used multiple configs for same alloy theme.
+`theme`  - optional, param is used instead of `name` in config when switching global theme. Useful when used multiple configs items for same alloy theme ex. `development` config and `production` config for same theme.
 
 ## Dynamic Substitution
 
@@ -93,6 +93,9 @@ This allows you to use dynamic content in your replacement values. Special dynam
 * `$TIME_EPOCH$` - The number of seconds since the unix epoch. Useful for increasing build numbers.
 * `$tiapp.property$` - Substitutes the current value of the tiapp.xml property's value. For example, `$tiapp.version$` would substitute the current value of the `<version>` element from tiapp.xml
 * `$tiappProperty.property$` - Substitutes the current value of tiapp.xml custom property's value. For example, `$tiappProperty.ti.ui.defaultunit$` would substitute the current value of the `<property name="ti.ui.defaultunit">` element from tiapp.xml.
+* `$YEAR$` - The current year - For example `2018`
+* `$MONTH$` - The current month - For example `8`
+* `$DAY$` - The current day - For example `23`
 
 ## Raw xpath Substitutions
 
