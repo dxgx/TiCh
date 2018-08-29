@@ -247,7 +247,10 @@ function tich() {
 			return _text.replace('$DATE$', now.toLocaleDateString())
 				.replace('$TIME$', now.toLocaleTimeString())
 				.replace('$DATETIME$', now.toLocaleString())
-				.replace('$TIME_EPOCH$', now.getTime().toString());
+				.replace('$TIME_EPOCH$', now.getTime().toString())
+				.replace('$YEAR$', now.getFullYear().toString())
+				.replace('$MONTH$', (now.getMonth() + 1).toString())
+				.replace('$DAY$', now.getDate().toString());
 
 		}
 
