@@ -250,7 +250,8 @@ function tich() {
 				.replace('$TIME_EPOCH$', now.getTime().toString())
 				.replace('$YEAR$', now.getFullYear().toString())
 				.replace('$MONTH$', (now.getMonth() + 1).toString())
-				.replace('$DAY$', now.getDate().toString());
+				.replace('$DAY$', now.getDate().toString())
+				.replace('$HOUR$', now.getHours().toString());
 
 		}
 

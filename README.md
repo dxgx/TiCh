@@ -93,9 +93,10 @@ This allows you to use dynamic content in your replacement values. Special dynam
 * `$TIME_EPOCH$` - The number of seconds since the unix epoch. Useful for increasing build numbers.
 * `$tiapp.property$` - Substitutes the current value of the tiapp.xml property's value. For example, `$tiapp.version$` would substitute the current value of the `<version>` element from tiapp.xml
 * `$tiappProperty.property$` - Substitutes the current value of tiapp.xml custom property's value. For example, `$tiappProperty.ti.ui.defaultunit$` would substitute the current value of the `<property name="ti.ui.defaultunit">` element from tiapp.xml.
-* `$YEAR$` - The current year - For example `2018`
-* `$MONTH$` - The current month - For example `8`
-* `$DAY$` - The current day - For example `23`
+* `$YEAR$` - current year - for example `2018`
+* `$MONTH$` - current month - For example `8`
+* `$DAY$` - current day - For example `23`
+* `$HOUR$` - current hour (0 - 23) - ex. `3`
 
 ## Raw xpath Substitutions
 
